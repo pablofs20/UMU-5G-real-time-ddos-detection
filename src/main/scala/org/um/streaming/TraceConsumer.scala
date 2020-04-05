@@ -43,6 +43,12 @@ class TraceConsumer extends Consumer {
 
        streaming.start()
        streaming.awaitTermination()
-
    }
+
+}
+
+object TraceConsumer{
+    def main(args: Array[String]): Unit = {
+        new TraceConsumer().run()
+    }
 }
