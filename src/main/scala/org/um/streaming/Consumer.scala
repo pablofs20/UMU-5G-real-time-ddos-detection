@@ -9,14 +9,14 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.api.java.JavaStreamingContext
 
 object Consumer {
-    val CONFIG_FILE = "config.properties"
+    private val CONFIG_FILE = "config.properties"
 }
 
 abstract class Consumer {
-    val logger = Logger(getClass)
-    var streaming : JavaStreamingContext = _
-    var kafkaParams : Map[String, Object] = _
-    var traces_topic, conversations_topic  : String = _
+    protected val logger : Logger = Logger(getClass)
+    protected var streaming : JavaStreamingContext = _
+    protected var kafkaParams : Map[String, Object] = _
+    protected var traces_topic, conversations_topic  : String = _
 
     def initConsumer(): Unit = {
         // Read from config.properties

@@ -5,9 +5,9 @@ import java.util.{Timer, TimerTask}
 import com.typesafe.scalalogging.Logger
 
 object TimeOutChecker{
-  val TIMEOUT_SEND : Long = 5 * 1000
-  val TIME_CHECK : Long = TIMEOUT_SEND
-  val TIMEOUT_DELETE : Long = 60 * 1000
+  private val TIMEOUT_SEND : Long = 5 * 1000
+  private val TIME_CHECK : Long = TIMEOUT_SEND
+  private val TIMEOUT_DELETE : Long = 60 * 1000
 }
 
 class TimeOutChecker(processor: Processor) {
