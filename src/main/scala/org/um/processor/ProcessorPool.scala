@@ -6,9 +6,6 @@ object ProcessorPool{
     private var processors: mutable.HashMap[Int,Processor] = new mutable.HashMap()
 
     def getProcessor(partitionId : Int): Processor ={
-        if (processors.getOrElse(partitionId, None) == None)
-            processors += (partitionId -> new Processor())
-
-        processors.apply(partitionId)
+        processors.getOrElseUpdate(partitionId, new Processor())
     }
 }
