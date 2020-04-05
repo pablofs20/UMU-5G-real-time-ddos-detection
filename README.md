@@ -1,0 +1,17 @@
+# Real Time attack detection  in 5G
+
+
+## Configuration
+A configuration file can be found in *src/resources/config.properties*. This file includes relevant properties for
+[Apache Kafka](https://kafka.apache.org/) and [Apache Spark Streaming](https://spark.apache.org/streaming/).
+
+Logs are generated using *log4j*. Another schema can be used modifying *src/resources/log4j.properties* 
+
+## Compilation & Exectution
+This software uses [Apache Maven](https://maven.apache.org/) for compilation. Please refer to the Maven documentation
+ to install this software in your machine.
+ 
+ Launch Conversation Processor:
+```
+$ mvn package exec:java -Dexec.mainClass=org.um.streaming.TraceConsumer  
+```
