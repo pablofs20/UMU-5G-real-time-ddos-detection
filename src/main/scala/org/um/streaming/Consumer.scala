@@ -28,7 +28,7 @@ abstract class Consumer {
         //Parse properties
         val name = props.getProperty("app_name")
         val batch_duration = props.getProperty("batch_duration")
-        val master = props.getProperty("master")
+        val master = props.getProperty("master").replaceAll("\"","")
         val backpressure = props.getProperty("backpressure")
 
         val conf = new SparkConf().setAppName(name).setMaster(master)
@@ -39,10 +39,10 @@ abstract class Consumer {
         streaming = new JavaStreamingContext(conf, Seconds(batch_duration.toLong))
 
         // Parse Kafka params
-        val kafkaAddress = props.getProperty("kafka_address")
-        val consumerGroup = props.getProperty("traces_group_id")
-        traces_topic = props.getProperty("traces_topic")
-        conversations_topic = props.getProperty("conversations_topic")
+        val kafkaAddress = props.getProperty("kafka_address").replaceAll("\"","")
+        val consumerGroup = props.getProperty("traces_group_id").replaceAll("\"","")
+        traces_topic = props.getProperty("traces_topic").replaceAll("\"","")
+        conversations_topic = props.getProperty("conversations_topic").replaceAll("\"","")
 
         logger.info("Kafka parameters: address -> " + kafkaAddress + ", ConsumerGroup -> " + consumerGroup)
 
