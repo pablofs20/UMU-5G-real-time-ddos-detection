@@ -2,7 +2,7 @@
 
 
 ## Configuration
-A configuration file can be found in *src/resources/config.properties*. This file includes relevant properties for
+A configuration file can be found in *config/config.properties*. This file includes relevant properties for
 [Apache Kafka](https://kafka.apache.org/) and [Apache Spark Streaming](https://spark.apache.org/streaming/).
 
 Logs are generated using *log4j*. Another schema can be used modifying *src/resources/log4j.properties* 

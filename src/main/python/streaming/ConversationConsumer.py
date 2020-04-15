@@ -5,7 +5,7 @@ import json
 from pyhocon import ConfigFactory
 from ml.mlModel import MLModel
 
-CONF_FILE = 'src/main/resources/config.properties'
+CONF_FILE = 'config/config.properties'
 
 
 def send_to_kafka(rdd):

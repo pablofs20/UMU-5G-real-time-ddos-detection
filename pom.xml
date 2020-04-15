@@ -65,11 +65,24 @@
 
     </dependencies>
 
+
     <build>
+        <resources>
+                <resource>
+                    <directory>config</directory>
+                </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>
+                            config/
+                        </include>
+                    </includes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
