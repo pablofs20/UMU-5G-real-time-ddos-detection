@@ -10,51 +10,52 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.util.control.Breaks
 
-class Processor (timeStatProc: TimeStatProc){
+class Processor(timeStatProc: TimeStatProc) {
     private val logger = Logger(getClass)
     private val timeOutChecker = new TimeOutChecker(this)
-    private val flows = new mutable.HashMap[FlowID,Flow]()
+    private val flows = new mutable.HashMap[FlowID, Flow]()
     private val sender = new ConversationSender()
 
     timeOutChecker.startChecking()
 
-    def processEntries(entries : java.lang.Iterable[String]) : Unit = synchronized{
-       /* val sorted = entries.asScala.toStream.sortWith((s0,s1) =>{
-            val tstamp0 = JsonMonitorizationParser.getTimeStamp(s0).replace(".","").replaceAll("\"","").toLong
-            val tstamp1 = JsonMonitorizationParser.getTimeStamp(s1).replace(".","").replaceAll("\"","").toLong
+    def processEntries(entries: java.lang.Iterable[String]): Unit = synchronized {
+        /* val sorted = entries.asScala.toStream.sortWith((s0,s1) =>{
+             val tstamp0 = JsonMonitorizationParser.getTimeStamp(s0).replace(".","").replaceAll("\"","").toLong
+             val tstamp1 = JsonMonitorizationParser.getTimeStamp(s1).replace(".","").replaceAll("\"","").toLong
 
-            tstamp0 < tstamp1
-        })*/
+             tstamp0 < tstamp1
+         })*/
         val sorted = entries.asScala.toList
-        logger.info("hola! " + this +" " + sorted.toString())
+        logger.info("hola! " + this + " " + sorted.toString())
 
-        sorted.foreach( entryRaw => {
-            Breaks.breakable {
-                val jsonParser = new JsonMonitorizationParser(entryRaw)
-                val entry = jsonParser.parseJson().split(",")
-               logger.info("que pasa" + this + entry.mkString(","))
+        var error = false
+        sorted.foreach(entryRaw => {
+            val jsonParser = new JsonMonitorizationParser(entryRaw)
+            val entry = jsonParser.parseJson().split(",")
+            logger.info("que pasa" + this + entry.mkString(","))
 
-                /*
-                // Split into each feature
-                val entry = entryRaw.split(",")
-                */
-                // Get the flowID of this unclassified network packet
-                val id = new FlowID(entry(6), entry(7), entry(8), entry(9))
-                // Check if this packet belongs to an already-registered flow
-                if (flows.get(id).isDefined) {
-                    // There is a flow with this ID
-                    // Get the stored conversation.
-                    val flow = flows(id)
-                    flow.logPkg(id, entry)
+            /*
+            // Split into each feature
+            val entry = entryRaw.split(",")
+            */
+            // Get the flowID of this unclassified network packet
+            val id = new FlowID(entry(6), entry(7), entry(8), entry(9))
+            // Check if this packet belongs to an already-registered flow
+            if (flows.get(id).isDefined) {
+                // There is a flow with this ID
+                // Get the stored conversation.
+                val flow = flows(id)
+                flow.logPkg(id, entry)
+            } else {
+
+                val syn = entry(14).toInt
+                val ack = entry(17).toInt
+                if (syn == 0 || ack == 1) {
+                    logger.info("breaking " + entry(6) + " " + entry(7) + " " + entry(8) + " " + entry(9))
+                    if (ack == 1) logger.info("unoack " + entryRaw)
+                    error = true
                 } else {
-
-                    val syn = entry(14).toInt
-                    val ack = entry(17).toInt
-                    if (syn == 0 || ack == 1){
-                        logger.info("breaking " + entry(6) + " "+ entry(7) +" "+ entry(8) +" "+ entry(9))
-                        (new Breaks).break
-                    }
-                    if (entry(6).equals("172.99.0.2")){
+                    if (entry(6).equals("172.99.0.2")) {
                         logger.info("Algo raro" + entryRaw)
                     }
 
@@ -66,7 +67,8 @@ class Processor (timeStatProc: TimeStatProc){
                     // Log time and host-based statistics
                     timeStatProc.log(newFlow.getUpIP, newFlow.getDownPort.toInt)
                 }
-
+            }
+            if (!error) {
                 // Add flow or log to time out checker
                 timeOutChecker.addFlow(id)
 
@@ -82,7 +84,7 @@ class Processor (timeStatProc: TimeStatProc){
 
                     // add host and time based stats
                     closedFlow.setTimeAndHostrelatedStatistics(
-                        timeStatProc.getStats(closedFlow.getUpIP,closedFlow.getDownPort.toInt))
+                        timeStatProc.getStats(closedFlow.getUpIP, closedFlow.getDownPort.toInt))
 
                     //Send it
                     logger.info("Sending Closed " + closedFlow.getConversation)
@@ -91,13 +93,13 @@ class Processor (timeStatProc: TimeStatProc){
                     //log out
                     timeStatProc.logOut(closedFlow.getUpIP, closedFlow.getDownPort.toInt)
                 }
-
             }
+            error = false
         })
 
     }
 
-    def removeFlow(flowID: FlowID): Unit = synchronized{
+    def removeFlow(flowID: FlowID): Unit = synchronized {
         flows.remove(flowID)
     }
 
@@ -105,7 +107,7 @@ class Processor (timeStatProc: TimeStatProc){
         flows(flowID)
     }
 
-    def getTimeStatProc : TimeStatProc = {
+    def getTimeStatProc: TimeStatProc = {
         timeStatProc
     }
 

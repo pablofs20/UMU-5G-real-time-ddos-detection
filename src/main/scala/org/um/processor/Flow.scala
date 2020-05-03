@@ -90,6 +90,9 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
     private var percentageSameConnectionsTotal: Double = 0
     private var percentageDiffConnectionsTotal: Double = 0
 
+    // Indicates who started TCP Termination.
+    var terminationSense = 0
+
 
     Array(0, 1).toStream.foreach(i => {
         pkgCount(i) = 0
@@ -241,17 +244,19 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
         // At this point, the state of the connection is, at least, open
         // so if I see a FIN packet, I need to update the state.
         // First Host wants to terminate connection
-        if ((this.state == Flow.FlowState.OPEN) && (fin == 1))
+        if ((this.state == Flow.FlowState.OPEN) && (fin == 1)) {
+            terminationSense = sense
             this.state = Flow.FlowState.FIN
-
+        }
         // Second host replies back
-        else if (this.state == Flow.FlowState.FIN) {
+        else if (this.state == Flow.FlowState.FIN && terminationSense != sense) {
             if (rst == 1) {
                 this.state = Flow.FlowState.CLOSED
             }
             // Four-way handshake
             else if ((fin == 1) && (ack == 0)) {
                 this.state = Flow.FlowState.TWO_FIN
+                logger.info("TWOFIN")
             }
             // Three way handshake
             else if ((fin == 1) && (ack == 1)) {
@@ -260,7 +265,7 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
         }
 
         // Four-way handshake
-        else if (this.state == Flow.FlowState.TWO_FIN) {
+        else if (this.state == Flow.FlowState.TWO_FIN && terminationSense != sense) {
             if (rst == 1) {
                 this.state = Flow.FlowState.CLOSED
             }
@@ -270,9 +275,10 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
         }
 
         // Last Ack
-        else if (this.state == Flow.FlowState.FINACK) {
+        else if (this.state == Flow.FlowState.FINACK && terminationSense == sense) {
             if ((ack == 1) || (rst == 1)) {
                 this.state = Flow.FlowState.CLOSED
+                logger.info("Closing Natural")
             }
         }
 
