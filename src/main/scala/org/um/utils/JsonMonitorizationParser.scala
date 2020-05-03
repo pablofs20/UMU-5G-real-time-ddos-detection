@@ -3,6 +3,7 @@ package org.um.utils
 import java.util
 
 import play.api.libs.json._
+import com.typesafe.scalalogging.Logger
 
 object JsonMonitorizationParser extends App{
     def getTimeStamp(json : String) : String = {
@@ -27,6 +28,7 @@ object JsonMonitorizationParser extends App{
 }
 
 class JsonMonitorizationParser(json: String){
+    private val logger = Logger(getClass)
 
     def parseJson() : String = {
         val rtn = new util.LinkedList[String]()

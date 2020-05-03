@@ -128,7 +128,9 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
 
         // Get the timestamp
         // Get rid of the "." and parse the stamp in microsec.
-        val tstamp = pkgInfo(3).replace(".", "").toLong
+        var tstampStr = pkgInfo(3).replace(".", "")
+        var tstamp = tstampStr.toLong
+
 
         // Log up/down ips and ports if New flow and tstamp
         if (state == Flow.FlowState.NEW) {
@@ -141,6 +143,21 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
             state = Flow.FlowState.OPEN
             //logger.info("Starts +" + tstamp)
         }
+        // Sanitize tstamp. Make sure it has the same amount of digits
+        else
+            {
+                val lengthInit = this.startTstamp.toString.length
+                val lengthNow = tstampStr.length
+                if (lengthNow != lengthInit){
+                    while (lengthNow < lengthInit){
+                        tstampStr += '0'
+                    }
+                    while (lengthNow > lengthInit){
+                        tstampStr = tstampStr.substring(0, tstampStr.length - 1)
+                    }
+                    tstamp = tstampStr.toLong
+                }
+            }
 
         // This function uses all the information of the logged packet.
         // So a displacement is required to access the statistics fields
@@ -180,7 +197,7 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
         // Timestamp
         // maybe an early packet arrived now
         if (tstamp < this.startTstamp) this.startTstamp = tstamp
-        else if (tstamp > this.lastTstamp) this.lastTstamp = tstamp
+        else this.lastTstamp = tstamp
 
 
         // Packet counting
@@ -258,6 +275,10 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
                 this.state = Flow.FlowState.CLOSED
             }
         }
+
+        // If state is OPEN and receive RST, CLOSE Flow
+        else if (this.state == Flow.FlowState.OPEN && rst == 1)
+            this.state = Flow.FlowState.CLOSED
 
         true
     }
@@ -378,8 +399,8 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
 
         // Socket information
         features.add(upIP)
-        features.add(upPort)
         features.add(downIP)
+        features.add(upPort)
         features.add(downPort)
 
         // add properties
@@ -435,4 +456,5 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
     def getFlowID : FlowID = {
         flowID
     }
+
 }

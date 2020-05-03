@@ -49,10 +49,15 @@ class Processor (timeStatProc: TimeStatProc){
                 } else {
 
                     val syn = entry(14).toInt
-                    if (syn == 0){
+                    val ack = entry(17).toInt
+                    if (syn == 0 || ack == 1){
                         logger.info("breaking " + entry(6) + " "+ entry(7) +" "+ entry(8) +" "+ entry(9))
                         (new Breaks).break
                     }
+                    if (entry(6).equals("172.99.0.2")){
+                        logger.info("Algo raro" + entryRaw)
+                    }
+
                     // A new flow should be created
                     val newFlow = new Flow(id, jsonParser)
                     newFlow.logPkg(id, entry)

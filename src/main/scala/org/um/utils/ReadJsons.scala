@@ -20,22 +20,23 @@ object ReadJsons extends App{
     }
 
     private val logger = Logger(getClass)
-    val topic = "event.report"
+    val topic = "flow_info"
 
     val props = new Properties()
-    props.put("bootstrap.servers", "192.168.1.107:9092")
+    props.put("bootstrap.servers", "10.0.1.104:9092")
     props.put("acks", "all")
     props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     val producer = new KafkaProducer[String,String](props)
 
-    val filename = "/home/norberto/Downloads/salida_kafka1"
+    val filename = "/home/norberto/Downloads/test.txt"
     val file = Source.fromFile(filename)
     val cont = file.mkString.split("(?m)^\\s*$")
     file.close()
 
     cont.foreach(json =>{
         //logger.info("Sending json")
+        logger.info(json)
         producer.send(new ProducerRecord[String,String](topic,ReadJsons.getKey(json),json))
         Thread.sleep(50)
 
