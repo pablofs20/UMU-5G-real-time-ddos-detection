@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 a.csv
 .gradle/
+test.csv
 # C extensions
 *.so
 
