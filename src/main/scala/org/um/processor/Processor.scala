@@ -47,9 +47,8 @@ class Processor(timeStatProc: TimeStatProc) {
                 val flow = flows(id)
                 flow.logPkg(id, entry)
             } else {
-
-                val syn = entry(14).toInt
-                val ack = entry(17).toInt
+                val syn = entry(15).toInt
+                val ack = entry(18).toInt
                 if (syn == 0 || ack == 1) {
                     logger.info("breaking " + entry(6) + " " + entry(7) + " " + entry(8) + " " + entry(9))
                     if (ack == 1) logger.info("unoack " + entryRaw)
@@ -67,6 +66,7 @@ class Processor(timeStatProc: TimeStatProc) {
                     // Log time and host-based statistics
                     timeStatProc.log(newFlow.getUpIP, newFlow.getDownPort.toInt)
                 }
+
             }
             if (!error) {
                 // Add flow or log to time out checker

@@ -94,6 +94,7 @@ class MLModel:
 
         # train
         hist = MLModel.__histo(cluster, self.centers, self.std, 36, 3, 1)
+        print(hist)
         self.nn.fit(hist, hist)
         hpred = pd.DataFrame(self.nn.predict(hist))
         rec = np.sqrt(np.sum((hist - hpred) ** 2, axis=1))
@@ -173,6 +174,8 @@ class MLModel:
         probs.loc[probs.Prediction == 'N', "Prediction"] = 0.0
         probs.loc[probs.Prediction == 'D', "Prediction"] = 0.5
 
+        print(probs)
+
         His_t = MLModel.__histo(attacks, self.centers, self.std, var, clusters, 1)
         dif = self.nn.predict(His_t) - His_t
         REC_t = np.sqrt(np.sum(dif ** 2, axis=1))
@@ -186,6 +189,10 @@ class MLModel:
 
         probs["Sugerencia"] = sug
 
+        print(probs)
+
         probs.loc[probs.Prediction == 0.5, 'Prediction'] = probs.loc[probs.Prediction == 0.5, 'Sugerencia']
+
+        print(probs)
 
         return probs

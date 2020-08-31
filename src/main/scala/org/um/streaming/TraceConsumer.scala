@@ -6,6 +6,7 @@ import org.um.processor.ProcessorPool
 
 class TraceConsumer extends Consumer {
     def run() {
+        println("eeeeempiezo")
         // init Consumer
         initConsumer()
 

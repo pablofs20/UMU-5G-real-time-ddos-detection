@@ -128,7 +128,6 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
         // The flow is closed, a package cannot be logged here.
         if (state == Flow.FlowState.CLOSED) return false
 
-
         // Get the timestamp
         // Get rid of the "." and parse the stamp in microsec.
         var tstampStr = pkgInfo(3).replace(".", "")
@@ -144,13 +143,13 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
             this.startTstamp = tstamp
             this.lastTstamp = tstamp
             state = Flow.FlowState.OPEN
-            //logger.info("Starts +" + tstamp)
         }
         // Sanitize tstamp. Make sure it has the same amount of digits
         else
             {
                 val lengthInit = this.startTstamp.toString.length
                 val lengthNow = tstampStr.length
+
                 if (lengthNow != lengthInit){
                     while (lengthNow < lengthInit){
                         tstampStr += '0'
@@ -167,15 +166,14 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
         val displacement = 10
         val size = pkgInfo(displacement).toDouble
         val tcpwin = pkgInfo(displacement + 1).toDouble
-        val ttl = pkgInfo(displacement + 2).toDouble
-        val fin = pkgInfo(displacement + 3).toDouble
-        val syn = pkgInfo(displacement + 4).toDouble
-        val rst = pkgInfo(displacement + 5).toDouble
-        val psh = pkgInfo(displacement + 6).toDouble
-        val ack = pkgInfo(displacement + 7).toDouble
-        val urg = pkgInfo(displacement + 8).toDouble
-        var contType: Double = -1
-        if (pkgInfo.length >= 20) contType = pkgInfo(displacement + 9).toDouble
+        val contType = pkgInfo(displacement + 2).toDouble
+        val ttl = pkgInfo(displacement + 3).toDouble
+        val fin = pkgInfo(displacement + 4).toDouble
+        val syn = pkgInfo(displacement + 5).toDouble
+        val rst = pkgInfo(displacement + 6).toDouble
+        val psh = pkgInfo(displacement + 7).toDouble
+        val ack = pkgInfo(displacement + 8).toDouble
+        val urg = pkgInfo(displacement + 9).toDouble
 
         // Determine if the packet is uplink (0) or downlink (1)
         // NOTE: This checking assumes that the first packet seen is the "uplink"
@@ -309,9 +307,11 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
        /* if (duration < 1000 || this.pkgCount(0) < 5 || this.pkgCount(1) < 5) {
             return null
         }*/
+        /*
         if (this.pkgCount(0) < 1 || this.pkgCount(1) < 1) {
             return null
         }
+        */
 
         results.add(duration.toString)
 
@@ -358,30 +358,66 @@ class Flow(flowID: FlowID, json : JsonMonitorizationParser) {
         results.add(this.ttlAvg(1).toString)
 
         // Percentage of packets for each flag in up and downlink
-        results.add((this.fin(0) / this.pkgCount(0)).toString)
-        results.add((this.syn(0) / this.pkgCount(0)).toString)
-        results.add((this.rst(0) / this.pkgCount(0)).toString)
-        results.add((this.psh(0) / this.pkgCount(0)).toString)
-        results.add((this.ack(0) / this.pkgCount(0)).toString)
-        results.add((this.urg(0) / this.pkgCount(0)).toString)
-        results.add((this.fin(1) / this.pkgCount(1)).toString)
-        results.add((this.syn(1) / this.pkgCount(1)).toString)
-        results.add((this.rst(1) / this.pkgCount(1)).toString)
-        results.add((this.psh(1) / this.pkgCount(1)).toString)
-        results.add((this.ack(1) / this.pkgCount(1)).toString)
-        results.add((this.urg(1) / this.pkgCount(1)).toString)
+        if (this.pkgCount(0) > 0) {
+            results.add((this.fin(0) / this.pkgCount(0)).toString)
+            results.add((this.syn(0) / this.pkgCount(0)).toString)
+            results.add((this.rst(0) / this.pkgCount(0)).toString)
+            results.add((this.psh(0) / this.pkgCount(0)).toString)
+            results.add((this.ack(0) / this.pkgCount(0)).toString)
+            results.add((this.urg(0) / this.pkgCount(0)).toString)
+        } else {
+            results.add(this.fin(0).toString)
+            results.add(this.syn(0).toString)
+            results.add(this.rst(0).toString)
+            results.add(this.psh(0).toString)
+            results.add(this.ack(0).toString)
+            results.add(this.urg(0).toString)
+        }
+
+        if (this.pkgCount(1) > 0) {
+            results.add((this.fin(1) / this.pkgCount(1)).toString)
+            results.add((this.syn(1) / this.pkgCount(1)).toString)
+            results.add((this.rst(1) / this.pkgCount(1)).toString)
+            results.add((this.psh(1) / this.pkgCount(1)).toString)
+            results.add((this.ack(1) / this.pkgCount(1)).toString)
+            results.add((this.urg(1) / this.pkgCount(1)).toString)
+        } else {
+            results.add(this.fin(1).toString)
+            results.add(this.syn(1).toString)
+            results.add(this.rst(1).toString)
+            results.add(this.psh(1).toString)
+            results.add(this.ack(1).toString)
+            results.add(this.urg(1).toString)
+        }
 
         // Percentage of packets with different properties
-        results.add((this.chgCipher(0) / this.sslPkgCount(0)).toString)
-        results.add((this.alert(0) / this.sslPkgCount(0)).toString)
-        results.add((this.handshake(0) / this.sslPkgCount(0)).toString)
-        results.add((this.appData(0) / this.sslPkgCount(0)).toString)
-        results.add((this.heartbeat(0) / this.sslPkgCount(0)).toString)
-        results.add((this.chgCipher(1) / this.sslPkgCount(1)).toString)
-        results.add((this.alert(1) / this.sslPkgCount(1)).toString)
-        results.add((this.handshake(1) / this.sslPkgCount(1)).toString)
-        results.add((this.appData(1) / this.sslPkgCount(1)).toString)
-        results.add((this.heartbeat(1) / this.sslPkgCount(1)).toString)
+        if (this.sslPkgCount(0) > 0) {
+            results.add((this.chgCipher(0) / this.sslPkgCount(0)).toString)
+            results.add((this.alert(0) / this.sslPkgCount(0)).toString)
+            results.add((this.handshake(0) / this.sslPkgCount(0)).toString)
+            results.add((this.appData(0) / this.sslPkgCount(0)).toString)
+            results.add((this.heartbeat(0) / this.sslPkgCount(0)).toString)
+        } else {
+            results.add(this.chgCipher(0).toString)
+            results.add(this.alert(0).toString)
+            results.add(this.handshake(0).toString)
+            results.add(this.appData(0).toString)
+            results.add(this.heartbeat(0).toString)
+        }
+
+        if (this.sslPkgCount(1) > 0) {
+            results.add((this.chgCipher(1) / this.sslPkgCount(1)).toString)
+            results.add((this.alert(1) / this.sslPkgCount(1)).toString)
+            results.add((this.handshake(1) / this.sslPkgCount(1)).toString)
+            results.add((this.appData(1) / this.sslPkgCount(1)).toString)
+            results.add((this.heartbeat(1) / this.sslPkgCount(1)).toString)
+        } else {
+            results.add(this.chgCipher(1).toString)
+            results.add(this.alert(1).toString)
+            results.add(this.handshake(1).toString)
+            results.add(this.appData(1).toString)
+            results.add(this.heartbeat(1).toString)
+        }
 
         //time and host based statistics
         results.add(sameConnectionsRelative.toString)

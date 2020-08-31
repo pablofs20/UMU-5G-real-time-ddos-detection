@@ -8,6 +8,7 @@ import org.apache.spark.streaming._
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.api.java.JavaStreamingContext
 
+
 object Consumer {
     private val CONFIG_FILE = "config.properties"
 }
@@ -42,6 +43,7 @@ abstract class Consumer {
         val kafkaAddress = props.getProperty("kafka_address").replaceAll("\"","")
         val consumerGroup = props.getProperty("traces_group_id").replaceAll("\"","")
         traces_topic = props.getProperty("traces_topic").replaceAll("\"","")
+        conversations_topic = props.getProperty("conversations_topic").replaceAll("\"","")
         conversations_topic = props.getProperty("conversations_topic").replaceAll("\"","")
 
         logger.info("Kafka parameters: address -> " + kafkaAddress + ", ConsumerGroup -> " + consumerGroup)

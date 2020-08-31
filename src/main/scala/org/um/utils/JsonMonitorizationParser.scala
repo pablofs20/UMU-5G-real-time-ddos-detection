@@ -47,6 +47,7 @@ class JsonMonitorizationParser(json: String){
         rtn.add(features("dstPort").toString())
         rtn.add(features("ipTotalLength").toString())
         rtn.add(features("tcpWindowSize").toString())
+        rtn.add(features("sslContentType").toString())
         rtn.add(features("ipTTL").toString())
         rtn.add(features("tcpFin:").toString())
         rtn.add(features("tcpSyn:").toString())
@@ -76,7 +77,7 @@ class JsonMonitorizationParser(json: String){
                 features1,
                 Json.obj(
                     "encapsulationLayer" -> features2("encapsulationLayer"),
-                    "encapsulationID1" -> features2("encapsulationID1"),
+                    "encapsulationID2" -> features2("encapsulationID2"),
                     "uplinkIP" -> features2("srcIP"),
                     "downlinkIP" -> features2("dstIP"),
                     "uplinkPort" -> features2("srcPort"),

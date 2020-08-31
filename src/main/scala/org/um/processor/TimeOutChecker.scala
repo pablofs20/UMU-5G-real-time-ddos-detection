@@ -64,14 +64,19 @@ class TimeOutChecker(processor: Processor) {
             flowTimeMap.forEach((flowID, time) =>{
                 val flow = processor.getFlow(flowID)
                 // If timeout and flow duration is > 5 sec
-                if (time.newPacketReceived && timeNow - time.timeStart > TimeOutChecker.TIMEOUT_SEND){
+                val timeout = timeNow - time.timeStart
+                logger.info("NUEVO PAQUETE ES " + time.newPacketReceived + " Y TIMEOUT ES " + timeout)
+                if (time.newPacketReceived && timeNow - time.timeLastPacket > TimeOutChecker.TIMEOUT_SEND){
+                    logger.info("ENTRO A MANDARLO");
                     // send it
                     time.newPacketReceived = false
                     flow.setTimeAndHostrelatedStatistics(
                         processor.getTimeStatProc.getStats(flow.getUpIP, flow.getDownPort.toInt))
+                    logger.info("A PUNTO DE MANDARLO")
                     sender.sendConversation(flow)
+                    logger.info("YA MANDAO")
 
-                    logger.info("Sending Timeout " + this +" " + processor.getFlow(flowID).getConversation)
+                    logger.info("Sending Timeout Capullos" + this +" " + processor.getFlow(flowID).getConversation)
 
                 }
                 else if(timeNow - time.timeLastPacket > TimeOutChecker.TIMEOUT_DELETE) {
