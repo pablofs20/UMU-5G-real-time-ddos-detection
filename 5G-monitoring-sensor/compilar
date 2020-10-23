@@ -1,2 +1,0 @@
-gcc sniffer.c main.c -o sniffer -lpcap -lrdkafka
-
