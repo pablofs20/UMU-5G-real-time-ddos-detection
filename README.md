@@ -17,7 +17,7 @@ And later, activate it:
 $ conda activate <env>
 ```  
 
-## Compilation & Exectution
+## Compilation & Execution
 This software uses [Apache Maven](https://maven.apache.org/) for compilation. Please refer to the Maven documentation
  to install this software in your machine.
  
@@ -26,7 +26,7 @@ This software uses [Apache Maven](https://maven.apache.org/) for compilation. Pl
 $ mvn package exec:java -Dexec.mainClass=org.um.streaming.TraceConsumer  
 ```
 
-To launch the ml processor, make sure you have activate the conda enviroment. Then, run:
+To launch the ml processor, make sure you have activated the conda enviroment. Then, run:
 ```
 $ sh runML.sh
 ```
