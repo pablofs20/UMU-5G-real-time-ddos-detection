@@ -26,14 +26,12 @@ class TimeStatProc {
     private def logNewConnectionsService(srcIp: String, dstPort: Int): Unit = {
         var mapSrcIp = newConnectionsService.get(srcIp)
         if (mapSrcIp == null) {
-            println("ACHO1")
             mapSrcIp = new util.HashMap[Int, Double]()
             newConnectionsService.put(srcIp, mapSrcIp)
         }
 
         var count = mapSrcIp.getOrDefault(dstPort, -1)
         if (count == -1){
-            println("ACHO2")
             mapSrcIp.put(dstPort, 0.0)
         }
 

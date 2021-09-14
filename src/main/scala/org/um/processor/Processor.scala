@@ -26,13 +26,11 @@ class Processor(timeStatProc: TimeStatProc) {
              tstamp0 < tstamp1
          })*/
         val sorted = entries.asScala.toList
-        logger.info("hola! " + this + " " + sorted.toString())
 
         var error = false
         sorted.foreach(entryRaw => {
             val jsonParser = new JsonMonitorizationParser(entryRaw)
             val entry = jsonParser.parseJson().split(",")
-            logger.info("que pasa" + this + entry.mkString(","))
 
             /*
             // Split into each feature
@@ -55,7 +53,7 @@ class Processor(timeStatProc: TimeStatProc) {
                     error = true
                 } else {
                     if (entry(6).equals("172.99.0.2")) {
-                        logger.info("Algo raro" + entryRaw)
+                        logger.info("Something strange" + entryRaw)
                     }
 
                     // A new flow should be created
