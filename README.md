@@ -5,8 +5,6 @@
 A configuration file can be found in *config/config.properties*. This file includes relevant properties for
 [Apache Kafka](https://kafka.apache.org/) and [Apache Spark Streaming](https://spark.apache.org/streaming/).
 
-Logs are generated using *log4j*. Another schema can be used modifying *src/resources/log4j.properties* 
-
 To configure the machine learning processor, python requeriments can be found in *env/python_req.txt*.
 To get this to work is recommended to create a [Conda](https://docs.conda.io/en/latest/) enviroment:
 ```
@@ -18,12 +16,13 @@ $ conda activate <env>
 ```  
 
 ## Compilation & Execution
-This software uses [Apache Maven](https://maven.apache.org/) for compilation. Please refer to the Maven documentation
+This project uses [SBT](https://www.scala-sbt.org/) for compilation. Please refer to the SBT [documentation](https://www.scala-sbt.org/1.x/docs/)
  to install this software in your machine.
  
- Launch Conversation Processor:
+ Compile and launch the conversation processor:
 ```
-$ mvn package exec:java -Dexec.mainClass=org.um.streaming.TraceConsumer  
+$ sbt compile
+$ sbt run
 ```
 
 To launch the ml processor, make sure you have activated the conda enviroment. Then, run:
