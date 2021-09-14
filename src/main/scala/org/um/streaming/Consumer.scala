@@ -21,16 +21,26 @@ abstract class Consumer {
 
     def initConsumer(): Unit = {
         // Read from config.properties
+        println("llego0")
         val props = new Properties()
+        println("llego1")
         val resourceStream = getClass.getClassLoader.getResourceAsStream(Consumer.CONFIG_FILE)
+        println("llego2")
         props.load(resourceStream)
+        println("llego3")
         resourceStream.close()
+
+        println("yeee")
 
         //Parse properties
         val name = props.getProperty("app_name")
         val batch_duration = props.getProperty("batch_duration")
         val master = props.getProperty("master").replaceAll("\"","")
         val backpressure = props.getProperty("backpressure")
+
+        println(name)
+        println(batch_duration)
+        println(master)
 
         val conf = new SparkConf().setAppName(name).setMaster(master)
             .set("spark.streaming.backpressure.enabled",backpressure)
