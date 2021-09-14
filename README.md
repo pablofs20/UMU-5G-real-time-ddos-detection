@@ -25,7 +25,7 @@ $ sbt compile
 $ sbt run
 ```
 
-To launch the ml processor, make sure you have activated the conda enviroment. Then, run:
+To launch the ML processor, make sure you have activated the conda enviroment. Then, run:
 ```
 $ sh runML.sh
 ```
