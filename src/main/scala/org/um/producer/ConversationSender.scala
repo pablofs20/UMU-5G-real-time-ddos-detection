@@ -40,7 +40,7 @@ class ConversationSender {
     def sendConversation(flow : Flow): Unit ={
         val conversation = flow.getConversation
         if (conversation == null) return
-        logger.info("Conversatione " + conversation.mkString(","))
+        logger.info("Conversation " + conversation.mkString(","))
 
         //producer.send(new ProducerRecord[String,String](topic,flow.getFlowID.id.toString, flow.getConversation.mkString(",")))
         producer.send(new ProducerRecord[String,String](topic,flow.getFlowID.id.toString, flow.getJson))
