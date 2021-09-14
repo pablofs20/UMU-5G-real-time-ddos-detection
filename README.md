@@ -5,7 +5,7 @@
 A configuration file can be found in *config/config.properties*. This file includes relevant properties for
 [Apache Kafka](https://kafka.apache.org/) and [Apache Spark Streaming](https://spark.apache.org/streaming/).
 
-To configure the machine learning processor, python requeriments can be found in *env/python_req.txt*.
+To configure the Machine Learning processor, Python requeriments can be found in *env/python_req.txt*.
 To get this to work is recommended to create a [Conda](https://docs.conda.io/en/latest/) enviroment:
 ```
 $ conda create --name <env> --file python_req.txt
