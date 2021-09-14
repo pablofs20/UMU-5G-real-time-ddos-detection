@@ -6,7 +6,6 @@ import org.um.processor.ProcessorPool
 
 class TraceConsumer extends Consumer {
     def run() {
-        println("eeeeempiezo")
         // init Consumer
         initConsumer()
 
@@ -34,7 +33,6 @@ class TraceConsumer extends Consumer {
         //For each partition process its network packets using an aggregator
         grouped.foreachRDD(rdd => rdd.foreachPartitionAsync(partition =>
             partition.forEachRemaining(records => {
-                println("keyss " + records._1)
                 // Get aggregator and process records
                 ProcessorPool.getProcessor(TaskContext.getPartitionId())
                     .processEntries(records._2.asInstanceOf[java.lang.Iterable[String]])
