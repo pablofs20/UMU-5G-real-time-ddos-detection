@@ -19,7 +19,7 @@ $ conda activate <env>
 This project uses [SBT](https://www.scala-sbt.org/) for compilation. Please refer to the SBT [documentation](https://www.scala-sbt.org/1.x/docs/)
  to install this software in your machine.
  
- Compile and launch the conversation processor:
+ To compile and launch the conversation processor, run:
 ```
 $ sbt compile
 $ sbt run
