@@ -24,7 +24,7 @@ This project uses [SBT](https://www.scala-sbt.org/) for compilation. Please refe
  To compile and launch the monitoring sensor, run:
  ```
 $ cd 5G-monitoring-sensor
-$ gcc main.c sniffer.c -o sensor -lpcap -lrdkafka
+$ gcc main.c sniffer.c -lpcap -lrdkafka -o sensor
 $ ./sensor
 ```
  
