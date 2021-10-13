@@ -10,7 +10,7 @@ For the conversations and ML processors, a configuration file can be found in *c
 In addition, to fully configure the ML processor, Python requeriments can be found in *env/python_req.txt*.
 To get this to work, it is recommended to create a [Conda](https://docs.conda.io/en/latest/) enviroment:
 ```
-$ conda create --name <env> --file python_req.txt
+$ conda create --name <env> --file env/python_req.txt
 ```
 And later, activate it:
 ```
