@@ -1,4 +1,4 @@
-# Real Time attack detection  in 5G
+# 5G Real-time attack detection
 
 
 ## Configuration
