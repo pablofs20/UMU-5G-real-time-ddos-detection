@@ -38,3 +38,5 @@ To launch the ML processor, make sure you have activated the conda enviroment. T
 ```
 $ sh runML.sh
 ```
+
+By last, this project also uses [Apache Kafka](https://kafka.apache.org/) to enable the communication between the modules. Make sure that a Kafka broker with the proper topics (consult configuration files) is configured and running before launching the scenario. Refer to this Kafka [quickstart guide](https://kafka.apache.org/quickstart) for more information.
