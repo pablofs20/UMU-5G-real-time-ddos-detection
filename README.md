@@ -5,7 +5,7 @@
 For the monitoring sensor, a configuration file can be found in *5G-monitoring-sensor/config/sniffer.conf*. Modify this file in order to change the interface name, specify a BPF filter, and configure the Kafka connection details.
 
 For the conversations and ML processors, a configuration file can be found in *config/config.properties*. This file includes relevant properties for
-[Apache Kafka](https://kafka.apache.org/) and [Apache Spark Streaming](https://spark.apache.org/streaming/).
+[Apache Kafka](https://kafka.apache.org/) and [Apache Spark Streaming](https://spark.apache.org/streaming/) as well as a path to the training file.
 
 In addition, to fully configure the ML processor, Python requeriments can be found in *env/python_req.txt*.
 To get this to work, it is recommended to create a [Conda](https://docs.conda.io/en/latest/) enviroment:
