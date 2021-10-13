@@ -8,9 +8,9 @@ For the conversations and ML processors, a configuration file can be found in *c
 [Apache Kafka](https://kafka.apache.org/) and [Apache Spark Streaming](https://spark.apache.org/streaming/), as well as a path to the file where training data is stored.
 
 In addition, to fully configure the ML processor, Python requeriments can be found in *env/python_req.txt*.
-To get this to work, it is recommended to create a [Conda](https://docs.conda.io/en/latest/) enviroment:
+To get this to work, it is recommended to create a [Conda](https://docs.conda.io/en/latest/) enviroment by executing:
 ```
-$ conda create --name <env> --file env/python_req.txt
+$ conda create --name <env> --file env/python_req.txt --channel conda-forge
 ```
 And later, activate it:
 ```
